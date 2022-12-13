@@ -12,10 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\lib\FNA\FNA.Core.csproj"/>
-    <ProjectReference Include="..\lib\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj"/>
+    <ProjectReference Include="..\lib\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\lib\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj" />
   </ItemGroup>
 
-  <Import Project="CopyNatives.targets"/>
+  <Import Project="CopyNatives.targets" />
 
 </Project>
