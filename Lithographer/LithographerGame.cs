@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Vector2 = System.Numerics.Vector2;
@@ -30,8 +29,11 @@ public class LithographerGame : Game
 
 	public static void Log(string text)
 	{
-		_latestLine = text;
-		_console.Add(text);
+		lock (_console)
+		{
+			_latestLine = text;
+			_console.Add(text);
+		}
 	}
 
 	public LithographerGame()
@@ -205,14 +207,17 @@ public class LithographerGame : Game
 
 			if (ImGui.BeginChild("Console", new Vector2(400, 200), true))
 			{
-				foreach (var line in _console)
+				lock (_console)
 				{
-					ImGui.TextWrapped(line);
-
-					if (line.Equals(_latestLine) && _autoScroll)
+					foreach (var line in _console)
 					{
-						ImGui.SetScrollHereY();
-						_latestLine = null;
+						ImGui.TextWrapped(line);
+
+						if (line.Equals(_latestLine) && _autoScroll)
+						{
+							ImGui.SetScrollHereY();
+							_latestLine = null;
+						}
 					}
 				}
 			}

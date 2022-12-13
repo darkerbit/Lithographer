@@ -115,7 +115,7 @@ public class ImGuiFileDialog
 		}
 
 		var dirty = false;
-		if (ImGui.BeginChild("Listing", new Vector2(400, 200), true, ImGuiWindowFlags.HorizontalScrollbar))
+		if (ImGui.BeginChild("Listing##" + _lastFullPath, new Vector2(400, 200), true, ImGuiWindowFlags.HorizontalScrollbar))
 		{
 			foreach (var dir in _directories)
 			{
