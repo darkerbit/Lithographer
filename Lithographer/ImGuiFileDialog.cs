@@ -120,7 +120,7 @@ namespace Lithographer
 			{
 				foreach (var dir in _directories)
 				{
-					if (ImGui.Selectable(dir + '/'))
+					if (ImGui.Selectable(Path.GetFileName(dir) + '/'))
 					{
 						_curPath = dir;
 						_pathError = false;
