@@ -19,4 +19,9 @@ echo -e "\e[32mIf this fails, you forgot to grab submodules!\e[m"
 cp lib/ImGui.NET/deps/cimgui/win-x64/cimgui.dll natives/x64/
 cp lib/ImGui.NET/deps/cimgui/linux-x64/cimgui.so natives/lib64/
 
+cd ffmpeg
+
+echo -e "\e[32mExtracting ffmpeg...\e[m"
+tar -xf ffmpeg.tar.xz
+
 echo -e "\e[32mDone!\e[m"
