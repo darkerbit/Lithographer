@@ -1,11 +1,13 @@
-﻿namespace Lithographer;
-
-internal static class Program
+﻿namespace Lithographer
 {
-	internal static void Main()
+	internal static class Program
 	{
-		using var game = new LithographerGame();
-		
-		game.Run();
+		internal static void Main()
+		{
+			using (var game = new LithographerGame())
+			{
+				game.Run();
+			}
+		}
 	}
 }
