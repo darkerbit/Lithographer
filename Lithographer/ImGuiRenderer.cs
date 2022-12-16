@@ -24,11 +24,11 @@ namespace Lithographer
         private RasterizerState _rasterizerState;
 
         private byte[] _vertexData;
-        private VertexBuffer _vertexBuffer;
+        private DynamicVertexBuffer _vertexBuffer;
         private int _vertexBufferSize;
 
         private byte[] _indexData;
-        private IndexBuffer _indexBuffer;
+        private DynamicIndexBuffer _indexBuffer;
         private int _indexBufferSize;
 
         // Textures
@@ -335,8 +335,8 @@ namespace Lithographer
             }
 
             // Copy the managed byte arrays to the gpu vertex- and index buffers
-            _vertexBuffer.SetData(_vertexData, 0, drawData.TotalVtxCount * DrawVertDeclaration.Size);
-            _indexBuffer.SetData(_indexData, 0, drawData.TotalIdxCount * sizeof(ushort));
+            _vertexBuffer.SetData(_vertexData, 0, drawData.TotalVtxCount * DrawVertDeclaration.Size, SetDataOptions.Discard);
+            _indexBuffer.SetData(_indexData, 0, drawData.TotalIdxCount * sizeof(ushort), SetDataOptions.Discard);
         }
 
         private unsafe void RenderCommandLists(ImDrawDataPtr drawData)
