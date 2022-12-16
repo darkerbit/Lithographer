@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using SDL2;
 
 namespace Lithographer
 {
@@ -14,6 +15,8 @@ namespace Lithographer
 		{
 			Task.Run(() =>
 			{
+				string os = SDL.SDL_GetPlatform();
+				
 				Running = true;
 
 				var process = new Process
@@ -21,7 +24,7 @@ namespace Lithographer
 					StartInfo = new ProcessStartInfo
 					{
 						FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-							RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "ffmpeg.exe" : "ffmpeg"),
+							os.Equals("Windows") ? "ffmpeg.exe" : "ffmpeg"),
 						Arguments =
 							$"-y -loglevel warning -stats -loop 1 -i \"{image}\" -i \"{music}\" -shortest -acodec aac -b:a 320k -vcodec h264 -preset veryslow -tune stillimage -pix_fmt yuv420p \"{outFile}\"",
 						ErrorDialog = true,

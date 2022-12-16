@@ -5,7 +5,7 @@
     <Message Text="Runtime ID: $(RuntimeIdentifier)" Importance="high"/>
   </Target>
 
-  <ItemGroup Condition=" $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows))) ">
+  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <Content Include="..\natives\x64\*.dll">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -16,7 +16,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
-  <ItemGroup Condition=" $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux))) ">
+  <ItemGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <Content Include="..\natives\lib64\*.*">
       <Link>lib64\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
