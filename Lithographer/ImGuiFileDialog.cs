@@ -68,13 +68,16 @@ namespace Lithographer
 
 		public void Update()
 		{
-			var stillOpen = true;
+			bool stillOpen = true;
 			if (!ImGui.BeginPopupModal("Open file...", ref stillOpen,
-				    ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.HorizontalScrollbar)) return;
+				    ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.HorizontalScrollbar))
+			{
+				return;
+			}
 
 			if (ImGui.BeginCombo("Drive", _curDrive))
 			{
-				foreach (var drive in _drives)
+				foreach (DriveInfo drive in _drives)
 				{
 					if (ImGui.Selectable(drive.Name, drive.Name == _curDrive))
 					{
@@ -114,11 +117,11 @@ namespace Lithographer
 				UpdateListing();
 			}
 
-			var dirty = false;
+			bool dirty = false;
 			if (ImGui.BeginChild("Listing##" + _lastFullPath, new Vector2(400, 200), true,
 				    ImGuiWindowFlags.HorizontalScrollbar))
 			{
-				foreach (var dir in _directories)
+				foreach (string dir in _directories)
 				{
 					if (ImGui.Selectable(Path.GetFileName(dir) + '/'))
 					{
@@ -129,9 +132,9 @@ namespace Lithographer
 					}
 				}
 
-				foreach (var file in _files)
+				foreach (string file in _files)
 				{
-					var name = Path.GetFileName(file);
+					string name = Path.GetFileName(file);
 					if (ImGui.Selectable(name, name.Equals(_curFilename), ImGuiSelectableFlags.AllowDoubleClick))
 					{
 						_curFilename = name;
@@ -148,7 +151,9 @@ namespace Lithographer
 			ImGui.EndChild();
 
 			if (dirty)
+			{
 				UpdateListing();
+			}
 
 			if (ImGui.InputText("Filename", ref _curFilename, 1024, ImGuiInputTextFlags.EnterReturnsTrue))
 			{

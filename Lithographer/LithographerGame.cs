@@ -16,7 +16,7 @@ namespace Lithographer
 		{
 			"Morb", "Open Celeste", "Download more RAM", "Overthrow the government", "Open FL Studio", "Open aseprite",
 			"Open OMORI", "Install Linux", "Re-install Windows", "Subscribe to twitch.tv/shayy", "Summon Sumire",
-			"Download Windows 11"
+			"Download Windows 11",
 		};
 
 		private bool _autoScroll = true;
@@ -40,7 +40,7 @@ namespace Lithographer
 			FNALoggerEXT.LogInfo += msg => Log($"[FNA] {msg}");
 			FNALoggerEXT.LogWarn += msg => Log($"[FNA WARNING] {msg}");
 
-			var graphics = new GraphicsDeviceManager(this);
+			GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 640;
 			graphics.PreferredBackBufferHeight = 480;
 
@@ -93,13 +93,19 @@ namespace Lithographer
 				}
 
 				if (_about)
+				{
 					AboutWindow();
+				}
 
 				if (_imguiDemo)
+				{
 					ImGui.ShowDemoWindow(ref _imguiDemo);
+				}
 
 				if (_imguiInfo)
+				{
 					ImGui.ShowAboutWindow(ref _imguiInfo);
+				}
 
 				MainWindow();
 
@@ -119,7 +125,9 @@ namespace Lithographer
 				Log(e.Message);
 
 				if (e.StackTrace != null)
+				{
 					Log(e.StackTrace);
+				}
 			}
 		}
 
@@ -185,15 +193,17 @@ namespace Lithographer
 
 				ImGui.Separator();
 
-				var disabled = FfmpegRunner.Running ||
-				               String.IsNullOrWhiteSpace(_inputImage) ||
-				               String.IsNullOrWhiteSpace(_inputMusic) ||
-				               String.IsNullOrWhiteSpace(_output);
+				bool disabled = FfmpegRunner.Running ||
+				                String.IsNullOrWhiteSpace(_inputImage) ||
+				                String.IsNullOrWhiteSpace(_inputMusic) ||
+				                String.IsNullOrWhiteSpace(_output);
 
 				ImGui.BeginDisabled(disabled);
 
 				if (ImGui.Button(_buttonString) && !disabled)
+				{
 					FfmpegRunner.Run(_inputImage, _inputMusic, _output);
+				}
 
 				ImGui.EndDisabled();
 
@@ -207,7 +217,7 @@ namespace Lithographer
 				{
 					lock (Console)
 					{
-						foreach (var line in Console)
+						foreach (string line in Console)
 						{
 							ImGui.TextWrapped(line);
 

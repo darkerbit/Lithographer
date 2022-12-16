@@ -4,7 +4,7 @@
 	{
 		internal static void Main()
 		{
-			using (var game = new LithographerGame())
+			using (LithographerGame game = new LithographerGame())
 			{
 				game.Run();
 			}

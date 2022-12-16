@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using SDL2;
 
@@ -16,10 +15,10 @@ namespace Lithographer
 			Task.Run(() =>
 			{
 				string os = SDL.SDL_GetPlatform();
-				
+
 				Running = true;
 
-				var process = new Process
+				Process process = new Process
 				{
 					StartInfo = new ProcessStartInfo
 					{
@@ -39,10 +38,12 @@ namespace Lithographer
 
 				while (!process.HasExited)
 				{
-					var line = process.StandardError.ReadLine();
-					
+					string line = process.StandardError.ReadLine();
+
 					if (line != null)
+					{
 						LithographerGame.Log(line);
+					}
 				}
 
 				process.WaitForExit();
