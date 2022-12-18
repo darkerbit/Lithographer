@@ -53,8 +53,6 @@ namespace Lithographer
 			graphics.PreferredBackBufferWidth = 640;
 			graphics.PreferredBackBufferHeight = 480;
 
-			Content.RootDirectory = "Content";
-
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
