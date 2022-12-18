@@ -21,7 +21,7 @@ namespace Lithographer
 		private string[] _directories;
 		private string[] _files;
 
-		private bool _pathError = false;
+		private bool _pathError;
 
 		public ImGuiFileDialog(string curPath, Action<string> action)
 		{
@@ -58,7 +58,7 @@ namespace Lithographer
 				Array.Sort(_directories);
 				Array.Sort(_files);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				// left empty
 			}

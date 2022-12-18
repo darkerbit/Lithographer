@@ -8,6 +8,19 @@ namespace Lithographer
 {
 	public class LithographerGame : Game
 	{
+		[STAThread]
+		internal static void Main()
+		{
+			FNALoggerEXT.LogError += msg => Log($"[FNA ERROR] {msg}");
+			FNALoggerEXT.LogInfo += msg => Log($"[FNA] {msg}");
+			FNALoggerEXT.LogWarn += msg => Log($"[FNA WARNING] {msg}");
+			
+			using (LithographerGame game = new LithographerGame())
+			{
+				game.Run();
+			}
+		}
+		
 		private ImGuiRenderer _imRenderer;
 
 		private readonly string _buttonString;
@@ -34,12 +47,8 @@ namespace Lithographer
 			}
 		}
 
-		public LithographerGame()
+		private LithographerGame()
 		{
-			FNALoggerEXT.LogError += msg => Log($"[FNA ERROR] {msg}");
-			FNALoggerEXT.LogInfo += msg => Log($"[FNA] {msg}");
-			FNALoggerEXT.LogWarn += msg => Log($"[FNA WARNING] {msg}");
-
 			GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 640;
 			graphics.PreferredBackBufferHeight = 480;
@@ -66,7 +75,7 @@ namespace Lithographer
 		private bool _imguiInfo;
 
 		// need to do this because of id stack problems
-		private bool _openPopup = false;
+		private bool _openPopup;
 
 		protected override void Draw(GameTime gameTime)
 		{
