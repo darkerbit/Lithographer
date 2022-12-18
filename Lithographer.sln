@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lithographer", "Lithographe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "lib\FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGui.NET", "ImGui.NET\ImGui.NET.csproj", "{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -18,5 +20,9 @@ Global
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Release|x64.Build.0 = Release|x64
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Debug|x64.ActiveCfg = Debug|x64
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Debug|x64.Build.0 = Debug|x64
+		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Debug|x64.ActiveCfg = Debug|x64
+		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Debug|x64.Build.0 = Debug|x64
+		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Release|x64.ActiveCfg = Release|x64
+		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 EndGlobal
