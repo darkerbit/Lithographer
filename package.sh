@@ -29,4 +29,4 @@ mv out/linux/kick.bin.x86_64 out/linux/Lithographer.bin.x86_64
 rm out/linux/kick.bin*
 
 cd out/linux
-tar -cf ../LithographerLinux.tar.xz *
+tar -cJvf ../LithographerLinux.tar.xz *
