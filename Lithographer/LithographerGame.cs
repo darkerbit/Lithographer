@@ -148,7 +148,8 @@ namespace Lithographer
 				ImGui.Separator();
 
 				ImGui.Text("Tools used:");
-				ImGui.Text("- .NET 7");
+				ImGui.Text("- .NET Framework 4.6.2");
+				ImGui.Text("- Mono");
 				ImGui.Text("- JetBrains Rider");
 				ImGui.Selectable("- Dear ImGui", ref _imguiInfo);
 				ImGui.Text("- FNA");
