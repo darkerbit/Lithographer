@@ -2,9 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lithographer", "Lithographer\Lithographer.csproj", "{7C29E8EA-28D9-49D2-9574-C4895274CEF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "lib\FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGui.NET", "lib\ImGui.NET\ImGui.NET.csproj", "{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "..\FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +18,5 @@ Global
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Release|x64.Build.0 = Release|x64
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Debug|x64.ActiveCfg = Debug|x64
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Debug|x64.Build.0 = Debug|x64
-		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Release|x64.ActiveCfg = Release|x64
-		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Release|x64.Build.0 = Release|x64
-		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Debug|x64.ActiveCfg = Debug|x64
-		{06E7D40A-1145-4418-94DE-7D7CE0F7EF4C}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 EndGlobal
