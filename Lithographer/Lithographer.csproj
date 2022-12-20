@@ -50,13 +50,13 @@
 		<Compile Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\ImGui.NET\ImGui.NET.csproj">
-		  <Project>{06e7d40a-1145-4418-94de-7d7ce0f7ef4c}</Project>
-		  <Name>ImGui.NET</Name>
-		</ProjectReference>
 		<ProjectReference Include="..\lib\FNA\FNA.csproj">
 			<Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
 			<Name>FNA</Name>
+		</ProjectReference>
+		<ProjectReference Include="..\lib\ImGui.NET\ImGui.NET.csproj">
+		  <Project>{06e7d40a-1145-4418-94de-7d7ce0f7ef4c}</Project>
+		  <Name>ImGui.NET</Name>
 		</ProjectReference>
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,5 +2,5 @@
 	path = lib/FNA
 	url = https://github.com/FNA-XNA/FNA.git
 [submodule "lib/ImGui.NET"]
-	path = lib/ImGui.NET
+	path = lib/ImGui.NET/ImGui.NET
 	url = https://github.com/mellinoe/ImGui.NET.git
