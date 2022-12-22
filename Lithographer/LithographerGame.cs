@@ -123,9 +123,10 @@ namespace Lithographer
 				}
 
 				_dialog?.Update();
+				
+				base.Draw(gameTime);
 
 				_imRenderer.AfterLayout();
-				base.Draw(gameTime);
 			}
 			catch (Exception e)
 			{
