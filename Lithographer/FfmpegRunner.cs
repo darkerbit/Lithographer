@@ -10,6 +10,8 @@ namespace Lithographer
 	{
 		public static bool Running { get; private set; }
 
+		private static readonly Logger FfmpegLogger = new Logger("ffmpeg");
+
 		public static void Run(string image, string music, string outFile)
 		{
 			Task.Run(() =>
@@ -42,7 +44,7 @@ namespace Lithographer
 
 					if (line != null)
 					{
-						LithographerGame.Log(line);
+						FfmpegLogger.Log(line);
 					}
 				}
 
@@ -50,7 +52,7 @@ namespace Lithographer
 				process.Close();
 				Running = false;
 
-				LithographerGame.Log("Done!");
+				FfmpegLogger.Log("Done!");
 			});
 		}
 	}

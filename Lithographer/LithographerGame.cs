@@ -11,16 +11,20 @@ namespace Lithographer
 		[STAThread]
 		internal static void Main()
 		{
-			FNALoggerEXT.LogError += msg => Log($"[FNA ERROR] {msg}");
-			FNALoggerEXT.LogInfo += msg => Log($"[FNA] {msg}");
-			FNALoggerEXT.LogWarn += msg => Log($"[FNA WARNING] {msg}");
-			
+			Logger fnaLogger = new Logger("FNA");
+
+			FNALoggerEXT.LogError = fnaLogger.Log;
+			FNALoggerEXT.LogInfo = fnaLogger.Log;
+			FNALoggerEXT.LogWarn = fnaLogger.Log;
+
 			using (LithographerGame game = new LithographerGame())
 			{
 				game.Run();
 			}
 		}
-		
+
+		private static readonly Logger LithoLogger = new Logger("Lithographer");
+
 		private ImGuiRenderer _imRenderer;
 
 		private readonly string _buttonString;
@@ -33,19 +37,6 @@ namespace Lithographer
 		};
 
 		private bool _autoScroll = true;
-
-		private static string _latestLine;
-
-		private static readonly List<string> Console = new List<string>();
-
-		public static void Log(string text)
-		{
-			lock (Console)
-			{
-				_latestLine = text;
-				Console.Add(text);
-			}
-		}
 
 		private LithographerGame()
 		{
@@ -123,18 +114,18 @@ namespace Lithographer
 				}
 
 				_dialog?.Update();
-				
+
 				base.Draw(gameTime);
 
 				_imRenderer.AfterLayout();
 			}
 			catch (Exception e)
 			{
-				Log(e.Message);
+				LithoLogger.Log(e.Message);
 
 				if (e.StackTrace != null)
 				{
-					Log(e.StackTrace);
+					LithoLogger.Log(e.StackTrace);
 				}
 			}
 		}
@@ -218,22 +209,21 @@ namespace Lithographer
 
 				ImGui.Separator();
 
-				ImGui.TextDisabled("Console");
-
-				ImGui.Checkbox("Auto-Scroll", ref _autoScroll);
-
-				if (ImGui.BeginChild("Console", new Vector2(400, 200), true))
+				lock (Logger.Console)
 				{
-					lock (Console)
-					{
-						foreach (string line in Console)
-						{
-							ImGui.TextWrapped(line);
+					ImGui.TextDisabled("Console");
 
-							if (line.Equals(_latestLine) && _autoScroll)
+					ImGui.Checkbox("Auto-Scroll", ref _autoScroll);
+
+					if (ImGui.BeginChild("Console", new Vector2(400, 200), true))
+					{
+						for (int i = Logger.Start; i != Logger.End; i = (i + 1) % Logger.Console.Length)
+						{
+							ImGui.TextUnformatted(Logger.Console[i]);
+
+							if (Logger.Console[i] == Logger.LastLine && _autoScroll)
 							{
 								ImGui.SetScrollHereY();
-								_latestLine = null;
 							}
 						}
 					}

@@ -50,6 +50,7 @@
 		<Compile Include="ImGuiFileDialog.cs" />
 		<Compile Include="ImGuiRenderer.cs" />
 		<Compile Include="LithographerGame.cs" />
+		<Compile Include="Logger.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 		<Compile Include="..\..\ImGui.NET\src\ImGui.NET\**\*.cs" />
 	</ItemGroup>
