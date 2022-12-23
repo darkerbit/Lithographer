@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Vector2 = System.Numerics.Vector2;
@@ -19,12 +18,12 @@ namespace Lithographer
 			FNALoggerEXT.LogWarn = fnaLogger.LogWarn;
 
 			Logger.StartFileLogger("log.txt");
-			
+
 			using (LithographerGame game = new LithographerGame())
 			{
 				game.Run();
 			}
-			
+
 			Logger.Shutdown();
 		}
 
