@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,9 +29,9 @@ namespace Lithographer
 				Message = message;
 			}
 		}
-		
+
 		public const int LOG_SIZE = 1024;
-		
+
 		public static Line[] Console { get; } = new Line[LOG_SIZE];
 		public static int Start { get; private set; }
 		public static int End { get; private set; }
@@ -59,9 +60,9 @@ namespace Lithographer
 			{
 				System.Console.WriteLine(plainLine);
 			}
-			
+
 			Debug.WriteLine(plainLine);
-			
+
 			LogConsole(line);
 		}
 
@@ -94,7 +95,9 @@ namespace Lithographer
 		{
 			_loggerTask = Task.Run(() =>
 			{
-				using (StreamWriter writer = new StreamWriter(File.OpenWrite(path)))
+				using (StreamWriter writer = new StreamWriter(File.OpenWrite(
+					       Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)
+				       )))
 				{
 					while (true)
 					{
@@ -107,7 +110,7 @@ namespace Lithographer
 						Terminate.Reset();
 
 						Queue<string> lines;
-						
+
 						lock (Lines)
 						{
 							lines = new Queue<string>(Lines);
@@ -128,7 +131,7 @@ namespace Lithographer
 			Terminate.Set();
 			_loggerTask.Wait();
 		}
-		
+
 		public string Prefix { get; }
 
 		public Logger(string prefix)
@@ -145,7 +148,7 @@ namespace Lithographer
 		{
 			Log(new Line(Prefix, Severity.Warning, msg));
 		}
-		
+
 		public void LogError(string msg)
 		{
 			Log(new Line(Prefix, Severity.Error, msg));
