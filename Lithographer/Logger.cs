@@ -1,4 +1,8 @@
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Lithographer
 {
@@ -32,20 +36,31 @@ namespace Lithographer
 		public static int End { get; private set; }
 		public static string LastLine { get; private set; }
 
+		private static readonly Queue<string> Lines = new Queue<string>();
+		private static Task _loggerTask;
+		private static readonly ManualResetEvent NewLine = new ManualResetEvent(false);
+		private static readonly ManualResetEvent Terminate = new ManualResetEvent(false);
+
 		private static void Log(Line line)
 		{
-			string console = $"[{line.Prefix}] ({line.Severity}) {line.Message}";
+			string plainLine = $"[{line.Prefix}] ({line.Severity}) {line.Message}";
+
+			lock (Lines)
+			{
+				Lines.Enqueue(plainLine);
+				NewLine.Set();
+			}
 
 			if (line.Severity >= Severity.Warning)
 			{
-				System.Console.Error.WriteLine(console);
+				System.Console.Error.WriteLine(plainLine);
 			}
 			else
 			{
-				System.Console.WriteLine(console);
+				System.Console.WriteLine(plainLine);
 			}
 			
-			Debug.WriteLine(console);
+			Debug.WriteLine(plainLine);
 			
 			LogConsole(line);
 		}
@@ -73,6 +88,37 @@ namespace Lithographer
 					Start = 0;
 				}
 			}
+		}
+
+		public static void StartFileLogger(string path)
+		{
+			_loggerTask = Task.Run(() =>
+			{
+				using (StreamWriter writer = new StreamWriter(File.OpenWrite(path)))
+				{
+					while (true)
+					{
+						if (WaitHandle.WaitAny(new WaitHandle[] { NewLine, Terminate }) == 1)
+						{
+							return;
+						}
+
+						NewLine.Reset();
+						Terminate.Reset();
+
+						while (Lines.Count > 0)
+						{
+							writer.WriteLine(Lines.Dequeue());
+						}
+					}
+				}
+			});
+		}
+
+		public static void Shutdown()
+		{
+			Terminate.Set();
+			_loggerTask.Wait();
 		}
 		
 		public string Prefix { get; }

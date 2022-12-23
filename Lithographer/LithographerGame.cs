@@ -18,10 +18,14 @@ namespace Lithographer
 			FNALoggerEXT.LogInfo = fnaLogger.Log;
 			FNALoggerEXT.LogWarn = fnaLogger.LogWarn;
 
+			Logger.StartFileLogger("log.txt");
+			
 			using (LithographerGame game = new LithographerGame())
 			{
 				game.Run();
 			}
+			
+			Logger.Shutdown();
 		}
 
 		private static readonly Logger LithoLogger = new Logger("Lithographer");
