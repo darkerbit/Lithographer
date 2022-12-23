@@ -106,9 +106,17 @@ namespace Lithographer
 						NewLine.Reset();
 						Terminate.Reset();
 
-						while (Lines.Count > 0)
+						Queue<string> lines;
+						
+						lock (Lines)
 						{
-							writer.WriteLine(Lines.Dequeue());
+							lines = new Queue<string>(Lines);
+							Lines.Clear();
+						}
+
+						while (lines.Count > 0)
+						{
+							writer.WriteLine(lines.Dequeue());
 						}
 					}
 				}
