@@ -4,30 +4,61 @@ namespace Lithographer
 {
 	public class Logger
 	{
-		public static string[] Console { get; } = new string[1024];
+		public enum Severity
+		{
+			Info,
+			Warning,
+			Error,
+		}
+
+		public readonly struct Line
+		{
+			public string Prefix { get; }
+			public Severity Severity { get; }
+			public string Message { get; }
+
+			internal Line(string prefix, Severity severity, string message)
+			{
+				Prefix = prefix;
+				Severity = severity;
+				Message = message;
+			}
+		}
+		
+		public const int LOG_SIZE = 1024;
+		
+		public static Line[] Console { get; } = new Line[LOG_SIZE];
 		public static int Start { get; private set; }
 		public static int End { get; private set; }
 		public static string LastLine { get; private set; }
 
-		public static void Log(string prefix, string msg)
+		private static void Log(Line line)
 		{
-			string formatted = $"[{prefix.Trim()}] {msg.Trim()}";
+			string console = $"[{line.Prefix}] ({line.Severity}) {line.Message}";
 
-			System.Console.WriteLine(formatted);
-			Debug.WriteLine(formatted);
+			if (line.Severity >= Severity.Warning)
+			{
+				System.Console.Error.WriteLine(console);
+			}
+			else
+			{
+				System.Console.WriteLine(console);
+			}
 			
-			LogConsole(formatted);
+			Debug.WriteLine(console);
+			
+			LogConsole(line);
 		}
 
-		private static void LogConsole(string line)
+		private static void LogConsole(Line line)
 		{
 			lock (Console)
 			{
-				LastLine = line;
+				LastLine = line.Message;
 
 				Console[End++] = line;
 
-				if (End >= Console.Length)
+				if (End >= LOG_SIZE)
 				{
 					End = 0;
 				}
@@ -37,7 +68,7 @@ namespace Lithographer
 					Start++;
 				}
 
-				if (Start >= Console.Length)
+				if (Start >= LOG_SIZE)
 				{
 					Start = 0;
 				}
@@ -53,7 +84,17 @@ namespace Lithographer
 
 		public void Log(string msg)
 		{
-			Log(Prefix, msg);
+			Log(new Line(Prefix, Severity.Info, msg));
+		}
+
+		public void LogWarn(string msg)
+		{
+			Log(new Line(Prefix, Severity.Warning, msg));
+		}
+		
+		public void LogError(string msg)
+		{
+			Log(new Line(Prefix, Severity.Error, msg));
 		}
 	}
 }

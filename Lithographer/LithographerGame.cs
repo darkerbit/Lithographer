@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
+using System.Numerics;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Vector2 = System.Numerics.Vector2;
+using Vector4 = System.Numerics.Vector4;
 
 namespace Lithographer
 {
@@ -13,9 +14,9 @@ namespace Lithographer
 		{
 			Logger fnaLogger = new Logger("FNA");
 
-			FNALoggerEXT.LogError = fnaLogger.Log;
+			FNALoggerEXT.LogError = fnaLogger.LogError;
 			FNALoggerEXT.LogInfo = fnaLogger.Log;
-			FNALoggerEXT.LogWarn = fnaLogger.Log;
+			FNALoggerEXT.LogWarn = fnaLogger.LogWarn;
 
 			using (LithographerGame game = new LithographerGame())
 			{
@@ -121,11 +122,11 @@ namespace Lithographer
 			}
 			catch (Exception e)
 			{
-				LithoLogger.Log(e.Message);
+				LithoLogger.LogError(e.Message);
 
 				if (e.StackTrace != null)
 				{
-					LithoLogger.Log(e.StackTrace);
+					LithoLogger.LogError(e.StackTrace);
 				}
 			}
 		}
@@ -215,21 +216,40 @@ namespace Lithographer
 
 					ImGui.Checkbox("Auto-Scroll", ref _autoScroll);
 
-					if (ImGui.BeginChild("Console", new Vector2(400, 200), true))
+					if (ImGui.BeginChild("Console", new Vector2(400, 200), true, ImGuiWindowFlags.HorizontalScrollbar))
 					{
-						for (int i = Logger.Start; i != Logger.End; i = (i + 1) % Logger.Console.Length)
+						for (int i = Logger.Start; i != Logger.End; i = (i + 1) % Logger.LOG_SIZE)
 						{
-							ImGui.TextUnformatted(Logger.Console[i]);
+							Logger.Line line = Logger.Console[i];
 
-							if (Logger.Console[i] == Logger.LastLine && _autoScroll)
+							ImGui.TextDisabled(line.Prefix);
+							ImGui.SameLine();
+
+							switch (line.Severity)
+							{
+								case Logger.Severity.Error:
+									ImGui.TextColored(new Vector4(1, 0, 0, 1), line.Message);
+									break;
+
+								case Logger.Severity.Warning:
+									ImGui.TextColored(new Vector4(1, 1, 0, 1), line.Message);
+									break;
+
+								case Logger.Severity.Info:
+								default:
+									ImGui.TextUnformatted(line.Message);
+									break;
+							}
+
+							if (line.Message == Logger.LastLine && _autoScroll)
 							{
 								ImGui.SetScrollHereY();
 							}
 						}
 					}
-				}
 
-				ImGui.EndChild();
+					ImGui.EndChild();
+				}
 			}
 
 			ImGui.End();
