@@ -42,8 +42,8 @@ namespace Lithographer
 		private LithographerGame()
 		{
 			GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
-			graphics.PreferredBackBufferWidth = 640;
-			graphics.PreferredBackBufferHeight = 480;
+			graphics.PreferredBackBufferWidth = 1024;
+			graphics.PreferredBackBufferHeight = 768;
 
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
@@ -216,7 +216,7 @@ namespace Lithographer
 
 					ImGui.Checkbox("Auto-Scroll", ref _autoScroll);
 
-					if (ImGui.BeginChild("Console", new Vector2(400, 200), true, ImGuiWindowFlags.HorizontalScrollbar))
+					if (ImGui.BeginChild("Console", new Vector2(800, 400), true, ImGuiWindowFlags.HorizontalScrollbar))
 					{
 						for (int i = Logger.Start; i != Logger.End; i = (i + 1) % Logger.LOG_SIZE)
 						{
