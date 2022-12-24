@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Lithographer

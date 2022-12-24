@@ -37,19 +37,19 @@ namespace Lithographer
 		public static int End { get; private set; }
 		public static string LastLine { get; private set; }
 
-		private static readonly Queue<string> Lines = new Queue<string>();
-		private static Task _loggerTask;
-		private static readonly ManualResetEvent NewLine = new ManualResetEvent(false);
-		private static readonly ManualResetEvent Terminate = new ManualResetEvent(false);
+		private static readonly Queue<string> lines = new Queue<string>();
+		private static Task loggerTask;
+		private static readonly ManualResetEvent newLine = new ManualResetEvent(false);
+		private static readonly ManualResetEvent terminate = new ManualResetEvent(false);
 
 		private static void Log(Line line)
 		{
 			string plainLine = $"[{line.Prefix}] ({line.Severity}) {line.Message}";
 
-			lock (Lines)
+			lock (lines)
 			{
-				Lines.Enqueue(plainLine);
-				NewLine.Set();
+				lines.Enqueue(plainLine);
+				newLine.Set();
 			}
 
 			if (line.Severity >= Severity.Warning)
@@ -93,33 +93,33 @@ namespace Lithographer
 
 		public static void StartFileLogger(string path)
 		{
-			_loggerTask = Task.Run(() =>
+			loggerTask = Task.Run(() =>
 			{
 				using (StreamWriter writer = new StreamWriter(File.OpenWrite(
-					       Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)
-				       )))
+					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)
+				)))
 				{
 					while (true)
 					{
-						if (WaitHandle.WaitAny(new WaitHandle[] { NewLine, Terminate }) == 1)
+						if (WaitHandle.WaitAny(new WaitHandle[] { newLine, terminate }) == 1)
 						{
 							return;
 						}
 
-						NewLine.Reset();
-						Terminate.Reset();
+						newLine.Reset();
+						terminate.Reset();
 
-						Queue<string> lines;
+						Queue<string> linesCopy;
 
-						lock (Lines)
+						lock (lines)
 						{
-							lines = new Queue<string>(Lines);
-							Lines.Clear();
+							linesCopy = new Queue<string>(lines);
+							lines.Clear();
 						}
 
-						while (lines.Count > 0)
+						while (linesCopy.Count > 0)
 						{
-							writer.WriteLine(lines.Dequeue());
+							writer.WriteLine(linesCopy.Dequeue());
 						}
 					}
 				}
@@ -128,8 +128,8 @@ namespace Lithographer
 
 		public static void Shutdown()
 		{
-			Terminate.Set();
-			_loggerTask.Wait();
+			terminate.Set();
+			loggerTask.Wait();
 		}
 
 		public string Prefix { get; }

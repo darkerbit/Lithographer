@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+
 using SDL2;
 
 namespace Lithographer
@@ -10,7 +11,7 @@ namespace Lithographer
 	{
 		public static bool Running { get; private set; }
 
-		private static readonly Logger FfmpegLogger = new Logger("ffmpeg");
+		private static readonly Logger logger = new Logger("ffmpeg");
 
 		public static void Run(string image, string music, string outFile)
 		{
@@ -44,7 +45,7 @@ namespace Lithographer
 
 					if (line != null)
 					{
-						FfmpegLogger.Log(line);
+						logger.Log(line);
 					}
 				}
 
@@ -52,7 +53,7 @@ namespace Lithographer
 				process.Close();
 				Running = false;
 
-				FfmpegLogger.Log("Done!");
+				logger.Log("Done!");
 			});
 		}
 	}

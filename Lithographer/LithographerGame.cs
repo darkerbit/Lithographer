@@ -1,6 +1,9 @@
 using System;
+
 using ImGuiNET;
+
 using Microsoft.Xna.Framework;
+
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
@@ -27,20 +30,20 @@ namespace Lithographer
 			Logger.Shutdown();
 		}
 
-		private static readonly Logger LithoLogger = new Logger("Lithographer");
+		private static readonly Logger logger = new Logger("Lithographer");
 
-		private ImGuiRenderer _imRenderer;
+		private ImGuiRenderer imRenderer;
 
-		private readonly string _buttonString;
+		private readonly string buttonString;
 
-		private static readonly string[] ButtonStrings =
+		private static readonly string[] buttonStrings =
 		{
 			"Morb", "Open Celeste", "Download more RAM", "Overthrow the government", "Open FL Studio", "Open aseprite",
 			"Open OMORI", "Install Linux", "Re-install Windows", "Subscribe to twitch.tv/shayy", "Summon Sumire",
 			"Download Windows 11",
 		};
 
-		private bool _autoScroll = true;
+		private bool autoScroll = true;
 
 		private LithographerGame()
 		{
@@ -51,42 +54,42 @@ namespace Lithographer
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
-			_buttonString = ButtonStrings[new Random().Next(ButtonStrings.Length)];
+			buttonString = buttonStrings[new Random().Next(buttonStrings.Length)];
 		}
 
 		protected override void LoadContent()
 		{
-			_imRenderer = new ImGuiRenderer(this);
-			_imRenderer.RebuildFontAtlas();
+			imRenderer = new ImGuiRenderer(this);
+			imRenderer.RebuildFontAtlas();
 
 			base.LoadContent();
 		}
 
-		private bool _about;
+		private bool about;
 
-		private bool _imguiDemo;
-		private bool _imguiInfo;
+		private bool imguiDemo;
+		private bool imguiInfo;
 
 		// need to do this because of id stack problems
-		private bool _openPopup;
+		private bool openPopup;
 
 		protected override void Draw(GameTime gameTime)
 		{
 			try
 			{
 				GraphicsDevice.Clear(Color.CornflowerBlue);
-				_imRenderer.BeforeLayout(gameTime);
+				imRenderer.BeforeLayout(gameTime);
 
 				if (ImGui.BeginMainMenuBar())
 				{
 					if (ImGui.BeginMenu("About"))
 					{
-						ImGui.MenuItem("About Lithographer", null, ref _about);
+						ImGui.MenuItem("About Lithographer", null, ref about);
 
 						ImGui.Separator();
 
-						ImGui.MenuItem("ImGui Demo Window", null, ref _imguiDemo);
-						ImGui.MenuItem("About Dear ImGui", null, ref _imguiInfo);
+						ImGui.MenuItem("ImGui Demo Window", null, ref imguiDemo);
+						ImGui.MenuItem("About Dear ImGui", null, ref imguiInfo);
 
 						ImGui.EndMenu();
 					}
@@ -94,49 +97,49 @@ namespace Lithographer
 					ImGui.EndMainMenuBar();
 				}
 
-				if (_about)
+				if (about)
 				{
 					AboutWindow();
 				}
 
-				if (_imguiDemo)
+				if (imguiDemo)
 				{
-					ImGui.ShowDemoWindow(ref _imguiDemo);
+					ImGui.ShowDemoWindow(ref imguiDemo);
 				}
 
-				if (_imguiInfo)
+				if (imguiInfo)
 				{
-					ImGui.ShowAboutWindow(ref _imguiInfo);
+					ImGui.ShowAboutWindow(ref imguiInfo);
 				}
 
 				MainWindow();
 
-				if (_openPopup)
+				if (openPopup)
 				{
 					ImGui.OpenPopup("Open file...");
-					_openPopup = false;
+					openPopup = false;
 				}
 
-				_dialog?.Update();
+				dialog?.Update();
 
 				base.Draw(gameTime);
 
-				_imRenderer.AfterLayout();
+				imRenderer.AfterLayout();
 			}
 			catch (Exception e)
 			{
-				LithoLogger.LogError(e.Message);
+				logger.LogError(e.Message);
 
 				if (e.StackTrace != null)
 				{
-					LithoLogger.LogError(e.StackTrace);
+					logger.LogError(e.StackTrace);
 				}
 			}
 		}
 
 		private void AboutWindow()
 		{
-			if (ImGui.Begin("About Lithographer", ref _about, ImGuiWindowFlags.AlwaysAutoResize))
+			if (ImGui.Begin("About Lithographer", ref about, ImGuiWindowFlags.AlwaysAutoResize))
 			{
 				ImGui.Text("Lithographer");
 				ImGui.Text("Created by darkerbit");
@@ -147,7 +150,7 @@ namespace Lithographer
 				ImGui.Text("- .NET Framework 4.6.2");
 				ImGui.Text("- Mono");
 				ImGui.Text("- JetBrains Rider");
-				ImGui.Selectable("- Dear ImGui", ref _imguiInfo);
+				ImGui.Selectable("- Dear ImGui", ref imguiInfo);
 				ImGui.Text("- FNA");
 				ImGui.Text("- ffmpeg");
 			}
@@ -155,58 +158,58 @@ namespace Lithographer
 			ImGui.End();
 		}
 
-		private ImGuiFileDialog _dialog;
+		private ImGuiFileDialog dialog;
 
-		private string _inputImage = "";
-		private string _inputMusic = "";
+		private string inputImage = "";
+		private string inputMusic = "";
 
-		private string _output = "";
+		private string output = "";
 
 		private void MainWindow()
 		{
 			if (ImGui.Begin("Lithographer", ImGuiWindowFlags.AlwaysAutoResize))
 			{
-				ImGui.InputText("Image", ref _inputImage, 1024);
+				ImGui.InputText("Image", ref inputImage, 1024);
 				ImGui.SameLine();
 
 				if (ImGui.Button("Open...##image"))
 				{
-					_dialog = new ImGuiFileDialog(_inputImage, path => _inputImage = path);
-					_openPopup = true;
+					dialog = new ImGuiFileDialog(inputImage, path => inputImage = path);
+					openPopup = true;
 				}
 
-				ImGui.InputText("Music", ref _inputMusic, 1024);
+				ImGui.InputText("Music", ref inputMusic, 1024);
 				ImGui.SameLine();
 
 				if (ImGui.Button("Open...##music"))
 				{
-					_dialog = new ImGuiFileDialog(_inputMusic, path => _inputMusic = path);
-					_openPopup = true;
+					dialog = new ImGuiFileDialog(inputMusic, path => inputMusic = path);
+					openPopup = true;
 				}
 
 				ImGui.Separator();
 
-				ImGui.InputText("Output", ref _output, 1024);
+				ImGui.InputText("Output", ref output, 1024);
 				ImGui.SameLine();
 
 				if (ImGui.Button("Save..."))
 				{
-					_dialog = new ImGuiFileDialog(_output, path => _output = path);
-					_openPopup = true;
+					dialog = new ImGuiFileDialog(output, path => output = path);
+					openPopup = true;
 				}
 
 				ImGui.Separator();
 
 				bool disabled = FfmpegRunner.Running ||
-				                String.IsNullOrWhiteSpace(_inputImage) ||
-				                String.IsNullOrWhiteSpace(_inputMusic) ||
-				                String.IsNullOrWhiteSpace(_output);
+					String.IsNullOrWhiteSpace(inputImage) ||
+					String.IsNullOrWhiteSpace(inputMusic) ||
+					String.IsNullOrWhiteSpace(output);
 
 				ImGui.BeginDisabled(disabled);
 
-				if (ImGui.Button(_buttonString) && !disabled)
+				if (ImGui.Button(buttonString) && !disabled)
 				{
-					FfmpegRunner.Run(_inputImage, _inputMusic, _output);
+					FfmpegRunner.Run(inputImage, inputMusic, output);
 				}
 
 				ImGui.EndDisabled();
@@ -217,7 +220,7 @@ namespace Lithographer
 				{
 					ImGui.TextDisabled("Console");
 
-					ImGui.Checkbox("Auto-Scroll", ref _autoScroll);
+					ImGui.Checkbox("Auto-Scroll", ref autoScroll);
 
 					if (ImGui.BeginChild("Console", new Vector2(800, 400), true, ImGuiWindowFlags.HorizontalScrollbar))
 					{
@@ -244,7 +247,7 @@ namespace Lithographer
 									break;
 							}
 
-							if (line.Message == Logger.LastLine && _autoScroll)
+							if ((line.Message == Logger.LastLine) && autoScroll)
 							{
 								ImGui.SetScrollHereY();
 							}

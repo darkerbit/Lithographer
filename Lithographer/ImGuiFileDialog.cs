@@ -1,90 +1,91 @@
 using System;
 using System.IO;
 using System.Numerics;
+
 using ImGuiNET;
 
 namespace Lithographer
 {
 	public class ImGuiFileDialog
 	{
-		private string _curPath;
+		private string curPath;
 
-		private string _lastFullPath;
+		private string lastFullPath;
 
-		private string _curFilename;
-		private string _curDrive;
+		private string curFilename;
+		private string curDrive;
 
-		private readonly DriveInfo[] _drives = DriveInfo.GetDrives();
+		private readonly DriveInfo[] drives = DriveInfo.GetDrives();
 
-		private readonly Action<string> _action;
+		private readonly Action<string> action;
 
-		private string[] _directories;
-		private string[] _files;
+		private string[] directories;
+		private string[] files;
 
-		private bool _pathError;
+		private bool pathError;
 
 		public ImGuiFileDialog(string curPath, Action<string> action)
 		{
 			if (String.IsNullOrWhiteSpace(curPath))
 			{
-				_curPath = Directory.GetCurrentDirectory();
-				_curFilename = "";
+				this.curPath = Directory.GetCurrentDirectory();
+				curFilename = "";
 			}
 			else
 			{
-				_curPath = Path.GetDirectoryName(Path.GetFullPath(curPath)) ?? "";
-				_curFilename = Path.GetFileName(curPath);
+				this.curPath = Path.GetDirectoryName(Path.GetFullPath(curPath)) ?? "";
+				curFilename = Path.GetFileName(curPath);
 
-				if (!Directory.Exists(_curPath))
+				if (!Directory.Exists(this.curPath))
 				{
-					_curPath = Directory.GetCurrentDirectory();
+					this.curPath = Directory.GetCurrentDirectory();
 				}
 			}
 
 			UpdateListing();
 
-			_curDrive = Directory.GetDirectoryRoot(_curPath);
+			curDrive = Directory.GetDirectoryRoot(this.curPath);
 
-			_action = action;
+			this.action = action;
 		}
 
 		private void UpdateListing()
 		{
 			try
 			{
-				_directories = Directory.GetDirectories(_curPath);
-				_files = Directory.GetFiles(_curPath);
+				directories = Directory.GetDirectories(curPath);
+				files = Directory.GetFiles(curPath);
 
-				Array.Sort(_directories);
-				Array.Sort(_files);
+				Array.Sort(directories);
+				Array.Sort(files);
 			}
 			catch (Exception)
 			{
 				// left empty
 			}
 
-			_lastFullPath = _curPath;
+			lastFullPath = curPath;
 		}
 
 		public void Update()
 		{
 			bool stillOpen = true;
 			if (!ImGui.BeginPopupModal("Open file...", ref stillOpen,
-				    ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.HorizontalScrollbar))
+				ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.HorizontalScrollbar))
 			{
 				return;
 			}
 
-			if (ImGui.BeginCombo("Drive", _curDrive))
+			if (ImGui.BeginCombo("Drive", curDrive))
 			{
-				foreach (DriveInfo drive in _drives)
+				foreach (DriveInfo drive in drives)
 				{
-					if (ImGui.Selectable(drive.Name, drive.Name == _curDrive))
+					if (ImGui.Selectable(drive.Name, drive.Name == curDrive))
 					{
-						_curPath = drive.Name;
-						_curDrive = drive.Name;
+						curPath = drive.Name;
+						curDrive = drive.Name;
 
-						_pathError = false;
+						pathError = false;
 
 						UpdateListing();
 					}
@@ -93,16 +94,16 @@ namespace Lithographer
 				ImGui.EndCombo();
 			}
 
-			if (_pathError)
+			if (pathError)
 			{
 				ImGui.TextColored(new Vector4(1, 0, 0, 1), "Invalid path!");
 			}
 
-			if (ImGui.InputText("Path", ref _curPath, 1024, ImGuiInputTextFlags.EnterReturnsTrue))
+			if (ImGui.InputText("Path", ref curPath, 1024, ImGuiInputTextFlags.EnterReturnsTrue))
 			{
-				_pathError = !Directory.Exists(_curPath);
+				pathError = !Directory.Exists(curPath);
 
-				if (!_pathError)
+				if (!pathError)
 				{
 					UpdateListing();
 				}
@@ -112,36 +113,36 @@ namespace Lithographer
 
 			if (ImGui.Button("Up"))
 			{
-				_curPath = Path.GetFullPath(Path.Combine(_lastFullPath, "../"));
-				_pathError = false;
+				curPath = Path.GetFullPath(Path.Combine(lastFullPath, "../"));
+				pathError = false;
 				UpdateListing();
 			}
 
 			bool dirty = false;
-			if (ImGui.BeginChild("Listing##" + _lastFullPath, new Vector2(400, 200), true,
-				    ImGuiWindowFlags.HorizontalScrollbar))
+			if (ImGui.BeginChild("Listing##" + lastFullPath, new Vector2(400, 200), true,
+				ImGuiWindowFlags.HorizontalScrollbar))
 			{
-				foreach (string dir in _directories)
+				foreach (string dir in directories)
 				{
 					if (ImGui.Selectable(Path.GetFileName(dir) + '/'))
 					{
-						_curPath = dir;
-						_pathError = false;
-						_curDrive = Directory.GetDirectoryRoot(_curPath);
+						curPath = dir;
+						pathError = false;
+						curDrive = Directory.GetDirectoryRoot(curPath);
 						dirty = true;
 					}
 				}
 
-				foreach (string file in _files)
+				foreach (string file in files)
 				{
 					string name = Path.GetFileName(file);
-					if (ImGui.Selectable(name, name.Equals(_curFilename), ImGuiSelectableFlags.AllowDoubleClick))
+					if (ImGui.Selectable(name, name.Equals(curFilename), ImGuiSelectableFlags.AllowDoubleClick))
 					{
-						_curFilename = name;
+						curFilename = name;
 
 						if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
 						{
-							_action(Path.Combine(_curPath, _curFilename));
+							action(Path.Combine(curPath, curFilename));
 							ImGui.CloseCurrentPopup();
 						}
 					}
@@ -155,9 +156,9 @@ namespace Lithographer
 				UpdateListing();
 			}
 
-			if (ImGui.InputText("Filename", ref _curFilename, 1024, ImGuiInputTextFlags.EnterReturnsTrue))
+			if (ImGui.InputText("Filename", ref curFilename, 1024, ImGuiInputTextFlags.EnterReturnsTrue))
 			{
-				_action(Path.Combine(_curPath, _curFilename));
+				action(Path.Combine(curPath, curFilename));
 				ImGui.CloseCurrentPopup();
 			}
 
@@ -165,7 +166,7 @@ namespace Lithographer
 
 			if (ImGui.Button("Open"))
 			{
-				_action(Path.Combine(_curPath, _curFilename));
+				action(Path.Combine(curPath, curFilename));
 				ImGui.CloseCurrentPopup();
 			}
 
