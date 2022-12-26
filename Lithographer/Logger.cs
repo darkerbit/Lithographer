@@ -107,7 +107,6 @@ namespace Lithographer
 						}
 
 						newLine.Reset();
-						terminate.Reset();
 
 						Queue<string> linesCopy;
 
