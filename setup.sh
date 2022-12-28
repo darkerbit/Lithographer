@@ -15,7 +15,6 @@ tar -xf fnalibs.tar.bz2
 cd ..
 
 echo -e "\e[32mCopying ImGui.NET natives...\e[m"
-echo -e "\e[32mIf this fails, you forgot to grab submodules!\e[m"
 cp ../ImGui.NET/deps/cimgui/win-x64/cimgui.dll natives/x64/
 cp ../ImGui.NET/deps/cimgui/linux-x64/cimgui.so natives/lib64/
 
