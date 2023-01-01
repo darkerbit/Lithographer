@@ -7,7 +7,7 @@ mkdir -p natives
 cd natives
 
 echo -e "\e[32mDownloading fnalibs...\e[m"
-curl https://fna.flibitijibibo.com/archive/fnalibs.tar.bz2 > fnalibs.tar.bz2
+curl -O https://fna.flibitijibibo.com/archive/fnalibs.tar.bz2
 
 echo -e "\e[32mExtracting fnalibs...\e[m"
 tar -xf fnalibs.tar.bz2
