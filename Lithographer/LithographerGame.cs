@@ -247,9 +247,11 @@ namespace Lithographer
 									break;
 							}
 
-							if ((line.Message == Logger.LastLine) && autoScroll)
+							if (ReferenceEquals(line.Message, Logger.LastLine) && autoScroll)
 							{
 								ImGui.SetScrollHereY();
+
+								Logger.LastLine = null;
 							}
 						}
 					}

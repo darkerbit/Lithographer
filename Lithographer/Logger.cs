@@ -35,7 +35,7 @@ namespace Lithographer
 		public static Line[] Console { get; } = new Line[LOG_SIZE];
 		public static int Start { get; private set; }
 		public static int End { get; private set; }
-		public static string LastLine { get; private set; }
+		public static string LastLine { get; set; }
 
 		private static readonly Queue<string> lines = new Queue<string>();
 		private static Task loggerTask;
