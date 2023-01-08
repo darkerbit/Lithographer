@@ -55,7 +55,7 @@ namespace Lithographer
 						FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
 							os.Equals("Windows") ? "ffmpeg.exe" : "ffmpeg"),
 						Arguments =
-							$"-y -loglevel warning -stats -loop 1 -i \"{image}\" -i \"{music}\" -shortest -acodec aac -b:a 320k -vcodec h264 -preset veryslow -tune stillimage -pix_fmt yuv420p \"{outFile}\"",
+							$"-y -loglevel warning -stats -framerate 30 -loop 1 -i \"{image}\" -i \"{music}\" -acodec aac -b:a 320k -vcodec h264 -preset veryslow -tune stillimage -pix_fmt yuv420p -shortest -fflags +shortest -max_interleave_delta 100M \"{outFile}\"",
 						ErrorDialog = true,
 						CreateNoWindow = true,
 						UseShellExecute = false,
