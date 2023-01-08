@@ -70,7 +70,7 @@ namespace Lithographer
 				{
 					string line = process.StandardError.ReadLine();
 
-					if (line != null)
+					if (!String.IsNullOrWhiteSpace(line))
 					{
 						logger.Log(line);
 					}
