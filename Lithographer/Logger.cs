@@ -95,8 +95,8 @@ namespace Lithographer
 		{
 			loggerTask = Task.Run(() =>
 			{
-				using (StreamWriter writer = new StreamWriter(File.OpenWrite(
-					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)
+				using (StreamWriter writer = new StreamWriter(File.Open(
+					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path), FileMode.Create
 				)))
 				{
 					while (true)
