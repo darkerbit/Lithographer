@@ -1,4 +1,33 @@
-﻿using System;
+﻿#region License
+
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2023 darkerbit, Eric Mellino and ImGui.NET contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#endregion
+
+#region Using statements
+
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Runtime.InteropServices;
@@ -13,13 +42,43 @@ using SDL2;
 
 using Vector2 = System.Numerics.Vector2;
 
+#endregion
+
 namespace Lithographer
 {
 	/// <summary>
-	///     ImGui renderer for use with XNA-likes (FNA & MonoGame)
+	/// ImGui renderer for use with XNA-likes (FNA & MonoGame)
 	/// </summary>
 	public class ImGuiRenderer
 	{
+		private static class DrawVertDeclaration
+		{
+			public static readonly VertexDeclaration Declaration;
+
+			public static readonly int Size;
+
+			static DrawVertDeclaration()
+			{
+				unsafe
+				{
+					Size = sizeof(ImDrawVert);
+				}
+
+				Declaration = new VertexDeclaration(
+					Size,
+
+					// Position
+					new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
+
+					// UV
+					new VertexElement(8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
+
+					// Color
+					new VertexElement(16, VertexElementFormat.Color, VertexElementUsage.Color, 0)
+				);
+			}
+		}
+
 		// Graphics
 		private readonly GraphicsDevice graphicsDevice;
 
@@ -83,9 +142,9 @@ namespace Lithographer
 		#region ImGuiRenderer
 
 		/// <summary>
-		///     Creates a texture and loads the font data from ImGui. Should be called when the
-		///     <see cref="GraphicsDevice" /> is
-		///     initialized but before any rendering is done
+		/// Creates a texture and loads the font data from ImGui. Should be called when the
+		/// <see cref="GraphicsDevice" /> is
+		/// initialized but before any rendering is done
 		/// </summary>
 		public unsafe void RebuildFontAtlas()
 		{
@@ -116,9 +175,9 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Creates a pointer to a texture, which can be passed through ImGui calls such as
-		///     <see cref="MediaTypeNames.Image" />
-		///     . That pointer is then used by ImGui to let us know what texture to draw
+		/// Creates a pointer to a texture, which can be passed through ImGui calls such as
+		/// <see cref="MediaTypeNames.Image" />
+		/// . That pointer is then used by ImGui to let us know what texture to draw
 		/// </summary>
 		public IntPtr BindTexture(Texture2D texture)
 		{
@@ -130,8 +189,8 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Removes a previously created texture pointer, releasing its reference and allowing it to be
-		///     deallocated
+		/// Removes a previously created texture pointer, releasing its reference and allowing it to be
+		/// deallocated
 		/// </summary>
 		public void UnbindTexture(IntPtr textureId)
 		{
@@ -139,7 +198,7 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Sets up ImGui for a new frame, should be called at frame start
+		/// Sets up ImGui for a new frame, should be called at frame start
 		/// </summary>
 		public void BeforeLayout(GameTime gameTime)
 		{
@@ -151,9 +210,9 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Asks ImGui for the generated geometry data and sends it to the graphics pipeline, should be
-		///     called after the UI is
-		///     drawn using ImGui.** calls
+		/// Asks ImGui for the generated geometry data and sends it to the graphics pipeline, should be
+		/// called after the UI is
+		/// drawn using ImGui.** calls
 		/// </summary>
 		public void AfterLayout()
 		{
@@ -166,7 +225,7 @@ namespace Lithographer
 		#region Setup & Update
 
 		/// <summary>
-		///     Maps ImGui keys to XNA keys. We use this later on to tell ImGui what keys were pressed
+		/// Maps ImGui keys to XNA keys. We use this later on to tell ImGui what keys were pressed
 		/// </summary>
 		protected void SetupInput()
 		{
@@ -218,7 +277,7 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Updates the <see cref="Effect" /> to the current matrices and texture
+		/// Updates the <see cref="Effect" /> to the current matrices and texture
 		/// </summary>
 		protected Effect UpdateEffect(Texture2D texture)
 		{
@@ -238,7 +297,7 @@ namespace Lithographer
 		}
 
 		/// <summary>
-		///     Sends XNA input state to ImGui
+		/// Sends XNA input state to ImGui
 		/// </summary>
 		protected void UpdateInput()
 		{
@@ -277,7 +336,7 @@ namespace Lithographer
 		#region Internals
 
 		/// <summary>
-		///     Gets the geometry as set up by ImGui and sends it to the graphics device
+		/// Gets the geometry as set up by ImGui and sends it to the graphics device
 		/// </summary>
 		private void RenderDrawData(ImDrawDataPtr drawData)
 		{

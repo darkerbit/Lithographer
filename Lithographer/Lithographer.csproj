@@ -41,7 +41,6 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="DrawVertDeclaration.cs" />
 		<Compile Include="FfmpegRunner.cs" />
 		<Compile Include="ImGuiFileDialog.cs" />
 		<Compile Include="ImGuiRenderer.cs" />
@@ -56,8 +55,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\lib\FNA\FNA.csproj">
-		  <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
-		  <Name>FNA</Name>
+			<Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
+			<Name>FNA</Name>
 		</ProjectReference>
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
