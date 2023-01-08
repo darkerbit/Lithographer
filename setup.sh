@@ -15,8 +15,8 @@ tar -xf fnalibs.tar.bz2
 cd ..
 
 echo -e "\e[32mCopying ImGui.NET natives...\e[m"
-cp ../ImGui.NET/deps/cimgui/win-x64/cimgui.dll natives/x64/
-cp ../ImGui.NET/deps/cimgui/linux-x64/cimgui.so natives/lib64/
+cp lib/ImGui.NET/deps/cimgui/win-x64/cimgui.dll natives/x64/
+cp lib/ImGui.NET/deps/cimgui/linux-x64/cimgui.so natives/lib64/
 
 cd ffmpeg
 

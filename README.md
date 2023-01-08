@@ -4,7 +4,6 @@ Tool that adds an image file to a music file, using ffmpeg.
 
 ### Requirements
 
-- [FNA](https://github.com/FNA-XNA/FNA) and [ImGui.NET](https://github.com/mellinoe/ImGui.NET) cloned **next to** the project folder (not in)
 - (Windows) Git Bash
 - (Windows) .NET Framework 4.6.2
 - (Linux) Mono (preferrably from [the upstream mono-project repos](https://www.mono-project.com/download/stable/))
@@ -12,8 +11,9 @@ Tool that adds an image file to a music file, using ffmpeg.
 
 ### Building
 
-1. `./setup.sh` to download natives (run in Git Bash on Windows and your preferred shell on Linux)
-2. `msbuild` (or the build button in your IDE)
+1. `git clone --recursive https://github.com/darkerbit/Lithographer.git` (if you forgot to pass in --recursive, you need to do `git submodule update --init --recursive` as well)
+2. `./setup.sh` to download natives (run in Git Bash on Windows and your preferred shell on Linux)
+3. `msbuild` (or the build button in your IDE)
 
 ### Running
 
